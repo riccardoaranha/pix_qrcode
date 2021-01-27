@@ -25,9 +25,7 @@ class Group<T extends Fields.IField<any>> implements Fields.IField<undefined> {
 		
 		if (this.Children.length == 0)
 		{ throw new Error('PIX_Error: Empty Group.'); }
-	
 	}
-	
 
 	to_message () : string {
 		if (Config.ValidationType == Config.ValidationTypes.Full)
@@ -41,7 +39,7 @@ class Group<T extends Fields.IField<any>> implements Fields.IField<undefined> {
 		{
 			if ((this.Min_length != -1 && content.length < this.Min_length) || 
 				(this.Max_length != -1 && content.length > this.Max_length))
-			{ console.log(this); throw new Error('PIX_Error: Invalid data lenght in PIX_Group'); }
+			{ throw new Error('PIX_Error: Invalid data lenght in PIX_Group'); }
 		}
 		return content;
 	}

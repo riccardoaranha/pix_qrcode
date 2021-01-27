@@ -1,14 +1,14 @@
 function zeroPad(num : number, places : number) : string {
   var zero = places - num.toString().length + 1;
-  return Array(+(zero > 0 && zero)).join("0") + num;
+  return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
 function numToHex(n : number, digits : number) : string {
     let hex = n.toString(16).toUpperCase();
     if (digits) {
-        return ("0".repeat(digits) + hex).slice(-digits);
+        return ('0'.repeat(digits) + hex).slice(-digits);
     }
-    return hex.length % 2 == 0 ? hex : "0" + hex;
+    return hex.length % 2 == 0 ? hex : '0' + hex;
 }
 
 function computeCRC( str : string, invert : boolean = false ) : string {

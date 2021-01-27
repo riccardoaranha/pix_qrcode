@@ -5,9 +5,9 @@ import * as Groups from './pix.groups';
 
 
 enum FieldRequirements {
-	Optional = "O",
-	Mandatory = "M",
-	Conditional = "C",
+	Optional = 'O',
+	Mandatory = 'M',
+	Conditional = 'C',
 };
 
 class AcceptedFieldDefinitions {
@@ -30,6 +30,9 @@ class Message {
 
 	// ToDo: Implement this method
 	validate() : void {
+		this.FieldList.forEach(function(message_field : MessageFields) {
+			message_field.Field.validate();
+		});
 	}
 
 	to_message() : string {
@@ -38,27 +41,32 @@ class Message {
 		let msg : string = '';
 		for(let item of this.FieldList)
 		{ 
-			if (item instanceof Fields.CRC16)
-			{ item.setValue(msg); }
+			if (item.Field instanceof Fields.CRC16)
+			{ item.Field.setValue(msg); }
 			msg = msg + item.Field.to_message(); 
 		}
+		if (Config.ValidationType == Config.ValidationTypes.Full)
+		{ this.validate(); }
 		return msg;
 	}
 
 	existsField(field_type : any) : boolean {
-		this.FieldList.forEach(function(field) {
-			if (field instanceof field_type) 
+		this.FieldList.forEach(function(message_field : MessageFields) {
+			if (message_field.Field instanceof field_type) 
 			{ return true; }
 		});
 		return false;
 	}
 	
-	getField(field_type : any) : Fields.IField<any> {
-		this.FieldList.forEach(function(field) {
-			if (field instanceof field_type) 
-			{ return field; }
+	getField(field_type : any) : any {
+		let found_field : any;
+		this.FieldList.forEach(function(message_field : MessageFields) {
+			if (message_field.Field instanceof field_type)
+			{ found_field = message_field.Field; return message_field; }
 		});
-		throw new Error("PIX_Error: Field not found");
+		if (found_field == undefined)
+		{ throw new Error('PIX_Error: Field not found'); }
+		return found_field;
 	}
 	
 	setField(field : Fields.IField<any>, order_override : number = -1) {
@@ -81,9 +89,11 @@ class Message {
 			{ existing_index = index }
 		});
 		if (existing_index != -1)
-		{ this.FieldList.splice(existing_index); }
-		this.FieldList.push(<MessageFields>{Order : order, Field : field });
-		this.FieldList.sort((a, b) => (a.Order > b.Order) ? 1 : -1);
+		{ this.FieldList[existing_index].Field = field; }
+		else {
+			this.FieldList.push(<MessageFields>{Order : order, Field : field });
+			this.FieldList.sort((a, b) => (a.Order > b.Order) ? 1 : -1);
+		}
 	}
 
 }
@@ -108,10 +118,11 @@ class Static extends Message {
 	constructor(key : string, merchant_name : string, merchant_city : string) {
 		super();
 		this.setField(new Fields.Payload_Format_Indicator());
-		this.setField(new Fields.Point_Of_Initiation_Method());
+		//this.setField(new Fields.Point_Of_Initiation_Method());
 		var grp : Groups.Grp_Merchant_Account_Information = new Groups.Grp_Merchant_Account_Information();
 		grp.Children.push(new Fields.Merchant_Account_Information('01', key));
 		this.setField(grp);
+
 		this.setField(new Fields.Merchant_Category_Code());
 		this.setField(new Fields.Transaction_Currency());
 		this.setField(new Fields.Country_Code());
