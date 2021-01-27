@@ -1,7 +1,7 @@
 import * as PIX from './../../src/pix'
 
 async function Test(request, response) {
-	/*console.log('Test 01');
+	console.log('Test 01');
 	var test01 = new PIX.Fields.StrField('00', '01');
 	console.log(test01);
 	console.log(test01.to_message());
@@ -27,7 +27,7 @@ async function Test(request, response) {
 	console.log(test05.to_message());
 	test05.Children.push(new PIX.Fields.Merchant_Account_Information('01', 'fulano2019@example.com'));
 	console.log(test05);
-	console.log(test05.to_message());*/
+	console.log(test05.to_message());
 
 	console.log('Test 06');
 	var test06 = new PIX.Messages.Static('fulano2019@example.com', 'FULANO DE TAL', 'BRASILIA');
