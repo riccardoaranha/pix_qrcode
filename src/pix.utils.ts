@@ -1,9 +1,9 @@
-function zeroPad(num : int, places : int) : string {
+function zeroPad(num : number, places : number) : string {
   var zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
-function numToHex(n : int, digits : int) : string {
+function numToHex(n : number, digits : number) : string {
     let hex = n.toString(16).toUpperCase();
     if (digits) {
         return ("0".repeat(digits) + hex).slice(-digits);
@@ -33,15 +33,13 @@ function computeCRC( str : string, invert : boolean = false ) : string {
 
 function decodeBase64Image(dataString : string) : Buffer {
 	var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-	var response = {};
 
+	if (matches == null)
+	{ throw new Error('Invalid input string'); }
 	if (matches.length !== 3) 
 	{ throw new Error('Invalid input string'); }
 
-	response.type = matches[1];
-	response.data = Buffer.from(matches[2], 'base64');
-	
-	return response;
+	return  Buffer.from(matches[2], 'base64');
 }
 
 export { zeroPad, numToHex, computeCRC, decodeBase64Image }

@@ -3,7 +3,7 @@ enum ValidationTypes {
 		Full = 1
 	}
 
-var ID_LENGHT : int  = 2;
-var ValidationType = ValidationTypes.Full;
+var ID_LENGHT : number = 2;
+var ValidationType:ValidationTypes = ValidationTypes.Full;
 
 export { ValidationTypes, ID_LENGHT, ValidationType }

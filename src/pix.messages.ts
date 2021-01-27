@@ -11,17 +11,21 @@ enum FieldRequirements {
 };
 
 class AcceptedFieldDefinitions {
-	Order : int;
-	Requirement : FieldRequirements;
+	Order : number = -1;
+	Requirement : FieldRequirements = FieldRequirements.Optional;
 }
 
 class MessageFields {
-	Order : int;
-	Field : IField;
+	Order : number;
+	Field : Fields.IField<any>;
+	constructor (order : number, field : Fields.IField<any>) {
+		this.Order = order;
+		this.Field = field;
+	}
 }
 
 class Message {
-	static AcceptedFieldList: Map<object, AcceptedFieldDefinitions> = undefined;
+	AcceptedFieldList: Map<any, AcceptedFieldDefinitions> = new Map();
 	FieldList : Array<MessageFields> = new Array<MessageFields>();
 
 	// ToDo: Implement this method
@@ -41,7 +45,7 @@ class Message {
 		return msg;
 	}
 
-	existsField(field_type : Object) : boolean {
+	existsField(field_type : any) : boolean {
 		this.FieldList.forEach(function(field) {
 			if (field instanceof field_type) 
 			{ return true; }
@@ -49,34 +53,34 @@ class Message {
 		return false;
 	}
 	
-	getField(field_type : Object) : IField {
+	getField(field_type : any) : Fields.IField<any> {
 		this.FieldList.forEach(function(field) {
 			if (field instanceof field_type) 
 			{ return field; }
 		});
-		throw new ("PIX_Error: Field not found");
+		throw new Error("PIX_Error: Field not found");
 	}
 	
-	setField(field : Fields.IField, order_override : int = undefined) {
+	setField(field : Fields.IField<any>, order_override : number = -1) {
 		let accepted : boolean = false;
-		var order : int = order_override;
-		if (this.constructor.AcceptedFieldList != undefined)
-		{
-			for(let key of this.constructor.AcceptedFieldList.keys()) {
-				if (field instanceof key) {
-					accepted = true; 
-					order = this.constructor.AcceptedFieldList.get(key).Order;
-				}
+		var order : number = order_override;
+
+		this.AcceptedFieldList.forEach((value: AcceptedFieldDefinitions, key: any) => {
+			if (field instanceof key) {
+				accepted = true; 
+				order = value.Order;
 			}
-			if (!accepted)
-			{ throw new Error('PIX_Error: Field not accepted in this message.'); }
-		}
-		let existing_index : integer = undefined;
+		});
+
+		if (!accepted)
+		{ throw new Error('PIX_Error: Field not accepted in this message.'); }
+
+		let existing_index : number = -1;
 		this.FieldList.forEach(function(item, index) {
 			if (order == item.Order) 
 			{ existing_index = index }
 		});
-		if (existing_index != undefined)
+		if (existing_index != -1)
 		{ this.FieldList.splice(existing_index); }
 		this.FieldList.push(<MessageFields>{Order : order, Field : field });
 		this.FieldList.sort((a, b) => (a.Order > b.Order) ? 1 : -1);
@@ -85,7 +89,7 @@ class Message {
 }
 
 class Static extends Message {
-	static AcceptedFieldList = new Map([
+	AcceptedFieldList : Map<any, AcceptedFieldDefinitions> = new Map<any, AcceptedFieldDefinitions>([
 		[Fields.Payload_Format_Indicator,         <AcceptedFieldDefinitions>{Order: 0,  Requirement: FieldRequirements.Mandatory}], 
 		[Fields.Point_Of_Initiation_Method,       <AcceptedFieldDefinitions>{Order: 1,  Requirement: FieldRequirements.Optional}],
 		[Groups.Grp_Merchant_Account_Information, <AcceptedFieldDefinitions>{Order: 2,  Requirement: FieldRequirements.Mandatory}],
@@ -105,7 +109,7 @@ class Static extends Message {
 		super();
 		this.setField(new Fields.Payload_Format_Indicator());
 		this.setField(new Fields.Point_Of_Initiation_Method());
-		var grp : Groups.Group = new Groups.Grp_Merchant_Account_Information();
+		var grp : Groups.Grp_Merchant_Account_Information = new Groups.Grp_Merchant_Account_Information();
 		grp.Children.push(new Fields.Merchant_Account_Information('01', key));
 		this.setField(grp);
 		this.setField(new Fields.Merchant_Category_Code());
