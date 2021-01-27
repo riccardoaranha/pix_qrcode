@@ -5,7 +5,7 @@ import * as PIX from './../../src/pix';
 export default (req : NextApiRequest, res : NextApiResponse) => {
 	console.log(req.body);
 
-	var msg : PIX.Messsages.Static = new PIX.Messages.Static('fulano2019@example.com', 'FULANO DE TAL', 'BRASILIA');
+	var msg : PIX.Messages.Static = new PIX.Messages.Static('fulano2019@example.com', 'FULANO DE TAL', 'BRASILIA');
 	msg.setField(new PIX.Fields.Transaction_Amount(1234.17));
 
 	return new Promise<void>((resolve, reject) => {
