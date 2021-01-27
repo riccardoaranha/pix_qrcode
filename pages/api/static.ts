@@ -43,22 +43,30 @@ function GenerateStatic(params : IStaticParams) : PIX.Messages.Static {
 export default (req : NextApiRequest, res : NextApiResponse) => {
 	try {
 		let params : IStaticParams;
+		if (req.body == '')
+		{ throw new Error ('Empty body request'); }
+
 		if (req.headers['content-type'] != undefined) {
 			if (req.headers['content-type'].toLowerCase() == 'application/json') {
 				params = req.body;
 			}
-			else {
-				let input = '{"key":"fulano2019@example.com","merchant_name":"FULANO DE TAL","merchant_city":"BRASILIA","transaction_amount":1234.17,"additional_info":"ola mundo"}';
+			if (req.headers['content-type'].toLowerCase() == 'text/plain') {
+				let input = req.body;
 				params = JSON.parse(input);
 			}
 		}
-		else 
-		{ throw new Error ('Empty body request'); }
+		else {
+			//let input = '{"key":"fulano2019@example.com","merchant_name":"FULANO DE TAL","merchant_city":"BRASILIA","transaction_amount":1234.17,"additional_info":"ola mundo"}';
+			let input = req.body;
+			params = JSON.parse(input);
+		}
+		
 		
 		let msg : PIX.Messages.Static = GenerateStatic(params);
 	
 		return new Promise<void>((resolve, reject) => {
 			PIX.QRCode.toPNG(msg.to_message(), function (data : Buffer) : void {
+				res.status(200);
 				res.setHeader('Content-Type', 'image/png');
 				res.setHeader('Cache-Control', 's-maxage=10, stale-while=revalidate');
 				res.write(data);
