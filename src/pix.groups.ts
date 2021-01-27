@@ -39,9 +39,9 @@ class Group<T extends Fields.IField<any>> implements Fields.IField<undefined> {
 		content = this.ID + content.length + content;
 		if (Config.ValidationType == Config.ValidationTypes.Full)
 		{
-			if ((this.Min_length != -1 && this.TextValue.length < this.Min_length) || 
-				(this.Max_length != -1 && this.TextValue.length > this.Max_length))
-			{ throw new Error('PIX_Error: Invalid data lenght in PIX_Group'); }
+			if ((this.Min_length != -1 && content.length < this.Min_length) || 
+				(this.Max_length != -1 && content.length > this.Max_length))
+			{ console.log(this); throw new Error('PIX_Error: Invalid data lenght in PIX_Group'); }
 		}
 		return content;
 	}
