@@ -53,6 +53,7 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 			if (req.headers['content-type'].toLowerCase() == 'text/plain') {
 				let input = req.body;
 				params = JSON.parse(input);
+				params = JSON.parse(input);
 			}
 		}
 		else {
@@ -65,7 +66,8 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		let msg : PIX.Messages.Static = GenerateStatic(params);
 	
 		return new Promise<void>((resolve, reject) => {
-			PIX.QRCode.toPNG(msg.to_message(), function (data : Buffer) : void {
+			//PIX.QRCode.toPNG(msg.to_message(), function (data : Buffer) : void {
+			PIX.QRCode.toDataURL(msg.to_message(), function (data : Buffer) : void {
 				res.status(200);
 				res.setHeader('Content-Type', 'image/png');
 				res.setHeader('Cache-Control', 's-maxage=10, stale-while=revalidate');
@@ -80,7 +82,9 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.write('Invalid request.\r\n');
 		res.write('\r\n');
 		res.write('Error description: \r\n');
-		res.write(error.toString());
+		res.write(error.toString() + '\r\n');
+		res.write('Error Stack: \r\n');
+		res.write(error.stack);
 		res.end();
 	}
 }
