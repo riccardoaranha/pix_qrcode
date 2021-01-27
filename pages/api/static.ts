@@ -47,27 +47,22 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		{ throw new Error ('Empty body request'); }
 
 		if (req.headers['content-type'] != undefined) {
-			if (req.headers['content-type'].toLowerCase() == 'application/json') {
-				params = req.body;
-			}
-			if (req.headers['content-type'].toLowerCase() == 'text/plain') {
-				let input = req.body;
-				params = JSON.parse(input);
-				params = JSON.parse(input);
-			}
+			if (req.headers['content-type'].toLowerCase() == 'application/json')
+			{ params = req.body; }
+			//if (req.headers['content-type'].toLowerCase() == 'text/plain')
+			else 
+			{ params = JSON.parse(req.body); }
+			
 		}
-		else {
-			//let input = '{"key":"fulano2019@example.com","merchant_name":"FULANO DE TAL","merchant_city":"BRASILIA","transaction_amount":1234.17,"additional_info":"ola mundo"}';
-			let input = req.body;
-			params = JSON.parse(input);
-		}
+		else
+		{ params = JSON.parse(req.body); }
 		
 		
 		let msg : PIX.Messages.Static = GenerateStatic(params);
 	
 		return new Promise<void>((resolve, reject) => {
 			//PIX.QRCode.toPNG(msg.to_message(), function (data : Buffer) : void {
-			PIX.QRCode.toDataURL(msg.to_message(), function (data : Buffer) : void {
+			PIX.QRCode.toDataURL(msg.to_message(), function (data : string) : void {
 				res.status(200);
 				res.setHeader('Content-Type', 'image/png');
 				res.setHeader('Cache-Control', 's-maxage=10, stale-while=revalidate');
@@ -81,9 +76,6 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.status(400);
 		res.write('Invalid request.\r\n');
 		res.write('\r\n');
-		res.write('Error description: \r\n');
-		res.write(error.toString() + '\r\n');
-		res.write('Error Stack: \r\n');
 		res.write(error.stack);
 		res.end();
 	}
