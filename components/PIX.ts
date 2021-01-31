@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const API_PIX = axios.create({
-	baseURL: 'http://localhost:3000/api'
+	baseURL: 'http://pix-qrcode.vercel.app/api'
 });
 
 function getImage() {
