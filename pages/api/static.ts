@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import * as PIX from './../../src/pix';
+import * as PIX from '../../lib/pix';
 
 interface IStaticParams {
 	//Mandatory required fields 
@@ -43,28 +43,19 @@ function GenerateStatic(params : IStaticParams) : PIX.Messages.Static {
 export default (req : NextApiRequest, res : NextApiResponse) => {
 	try {
 		let params : IStaticParams;
-		if (req.body == '')
-		{ throw new Error ('Empty body request'); }
-
-		if (req.headers['content-type'] != undefined) {
-			if (req.headers['content-type'].toLowerCase() == 'application/json')
-			{ params = req.body; }
-			//if (req.headers['content-type'].toLowerCase() == 'text/plain')
-			else 
-			{ params = JSON.parse(req.body); }
-			
-		}
-		else
+		if (typeof req.body === 'string')
 		{ params = JSON.parse(req.body); }
-		
+		else 
+		{ params = req.body; }
 		
 		let msg : PIX.Messages.Static = GenerateStatic(params);
-	
+		msg.validate();
+		
 		return new Promise<void>((resolve, reject) => {
-			//PIX.QRCode.toPNG(msg.to_message(), function (data : Buffer) : void {
-			PIX.QRCode.toDataURL(msg.to_message(), function (data : string) : void {
+			//PIX.QRCode.toPNG(msg.toString(), function (data : Buffer) : void {
+			PIX.QRCode.toDataURL(msg.toString(), function (data : string) : void {
 				res.status(200);
-				res.setHeader('Content-Type', 'image/png');
+				//res.setHeader('Content-Type', 'image/png');
 				res.setHeader('Cache-Control', 's-maxage=10, stale-while=revalidate');
 				res.write(data);
 				res.end();
@@ -72,7 +63,7 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 			});
 		});
 	}
-	catch (error : any) {
+	catch (error) {
 		res.status(400);
 		res.write('Invalid request.\r\n');
 		res.write('\r\n');
