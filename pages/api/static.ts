@@ -65,10 +65,10 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 	}
 	catch (error) {
 		res.status(400);
-		res.write('Invalid request.\r\n');	
+		res.write('Invalid request.\r\n');
 		res.write('\r\n');
 		res.write('Input\r\n');
-		res.write(params);
+		res.write(req.body);
 		res.write('\r\n');
 		res.write('\r\n');
 		res.write(error.stack);
