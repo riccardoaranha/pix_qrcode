@@ -56,15 +56,6 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 			PIX.QRCode.toDataURL(msg.toString(), function (data : string) : void {
 				res.status(200);
 				//res.setHeader('Content-Type', 'image/png');
-				res.setHeader('Access-Control-Allow-Credentials', 'true')
-				res.setHeader('Access-Control-Allow-Origin', '*')
-				// another common pattern
-				// res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-				res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-				res.setHeader(
-					'Access-Control-Allow-Headers',
-					'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-				)
 				res.setHeader('Cache-Control', 's-maxage=10, stale-while=revalidate');
 				res.write(data);
 				res.end();
