@@ -73,7 +73,7 @@ class Grp_Additional_Data_Field extends Group<Fields.Additional_Data_Field> {
 class Grp_Unreserved_Templates extends Group<Fields.Unreserved_Templates> {
 	constructor(id : string) { 
 		if (id < '80' || id > '99')
-		{ throw new Utils.PIXError('Invalid ID for Grp_Unreserved_Templates.', [this, id]); }
+		{ throw new Utils.PIXError('Invalid ID for Grp_Unreserved_Templates.', [id]); }
 		super(id, 1, 99); 
 	}
 }
