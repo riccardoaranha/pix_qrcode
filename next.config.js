@@ -3,7 +3,7 @@ module.exports = {
       //API_URL: 'http://localhost:3000/api',
       API_URL: 'https://pix-qrcode.vercel.app/api',
     },
-    async headers() {
+    /*async headers() {
     return [
         {
           // matching all API routes
@@ -16,5 +16,5 @@ module.exports = {
           ]
         }
       ]
-    },
+    },*/
 }
