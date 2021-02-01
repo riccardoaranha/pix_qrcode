@@ -1,6 +1,7 @@
 import * as Config from './pix.config';
 import * as Fields from './pix.fields';
 import * as Groups from './pix.groups';
+import * as Utils from './pix.utils';
 
 
 enum FieldRequirements {
@@ -64,7 +65,7 @@ class Message {
 			{ found_field = message_field.Field; return message_field; }
 		});
 		if (found_field == undefined)
-		{ throw new Error('PIX_Error: Field not found'); }
+		{ throw new Utils.PIXError('Field not found.', [this, field_type]); }
 		return found_field;
 	}
 	
@@ -80,7 +81,7 @@ class Message {
 		});
 
 		if (!accepted)
-		{ throw new Error('PIX_Error: Field not accepted in this message.'); }
+		{ throw new Utils.PIXError('Field not accepted in this message.', [this, field, order_override]); }
 
 		let existing_index : number = -1;
 		this.FieldList.forEach(function(item, index) {

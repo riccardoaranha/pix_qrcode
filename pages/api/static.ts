@@ -68,6 +68,8 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.write('Invalid request.\r\n');
 		res.write('\r\n');
 		res.write(error.stack);
+		if (error instanceof PIX.Utils.PIXError)
+		{ res.write(error.contents); }
 		res.end();
 	}
 }

@@ -21,10 +21,10 @@ class Group<T extends Fields.IField<any>> implements Fields.IField<undefined> {
 
 	validate() : void {
 		if (this.ID.length != Config.ID_LENGHT)
-		{ throw new Error('PIX_Error: Invalid ID in Group.'); }
+		{ throw new Utils.PIXError('Invalid ID in Group.', [this]); }
 		
 		if (this.Children.length == 0)
-		{ throw new Error('PIX_Error: Empty Group.'); }
+		{ throw new Utils.PIXError('Empty Group.', [this]); }
 
 		var content = '';
 		this.Children.forEach(function(item) {
@@ -37,7 +37,7 @@ class Group<T extends Fields.IField<any>> implements Fields.IField<undefined> {
 		{
 			if ((this.Min_length != -1 && content.length < this.Min_length) || 
 				(this.Max_length != -1 && content.length > this.Max_length))
-			{ throw new Error('PIX_Error: Invalid data lenght in PIX_Group'); }
+			{ throw new Utils.PIXError('Invalid data lenght in PIX_Group.', [this]); }
 		}
 	}
 
@@ -54,7 +54,7 @@ class Group<T extends Fields.IField<any>> implements Fields.IField<undefined> {
 	}
 	
 	setValue(value : undefined) : void {
-		throw new Error('PIX_Error: Invalid operation - can not set a value to a group.'); 
+		throw new Utils.PIXError('Invalid operation - can not set a value to a group.', [this, value]); 
 	}
 }
 
@@ -73,7 +73,7 @@ class Grp_Additional_Data_Field extends Group<Fields.Additional_Data_Field> {
 class Grp_Unreserved_Templates extends Group<Fields.Unreserved_Templates> {
 	constructor(id : string) { 
 		if (id < '80' || id > '99')
-		{ throw new Error('PIX_Error: Invalid ID for Grp_Unreserved_Templates'); }
+		{ throw new Utils.PIXError('Invalid ID for Grp_Unreserved_Templates.', [this, id]); }
 		super(id, 1, 99); 
 	}
 }

@@ -1,3 +1,17 @@
+class PIXError extends Error { 
+	contents : string;
+	constructor(message: string, params : any[]) {
+		super('PIX Error:' + message);
+		this.name = 'PIXError';
+		var content = '';
+		params.forEach(function(obj : any) {
+			content = content + JSON.stringify(obj) + '\r\n';
+		});
+		this.contents = content;
+	}
+}
+
+
 function zeroPad(num : number, places : number) : string {
   var zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join('0') + num;
@@ -42,4 +56,4 @@ function decodeBase64Image(dataString : string) : Buffer {
 	return  Buffer.from(matches[2], 'base64');
 }
 
-export { zeroPad, numToHex, computeCRC, decodeBase64Image }
+export { PIXError, zeroPad, numToHex, computeCRC, decodeBase64Image }

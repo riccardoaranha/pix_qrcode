@@ -36,11 +36,11 @@ abstract class Field<T> implements IField<T> {
 
 	validate() : void {
 		if (this.ID.length != Config.ID_LENGHT)
-		{ throw new Error('PIX_Error: Invalid ID in PIX_Field.'); }
+		{ throw new Utils.PIXError('Invalid ID in PIX_Field.', [this]); }
 
 		if ((this.Min_length != -1 && this.TextValue.length < this.Min_length) || 
 			(this.Max_length != -1 && this.TextValue.length > this.Max_length))
-		{ throw new Error('PIX_Error: Invalid Data in PIX_Field.'); }
+		{ throw new Utils.PIXError('Invalid Data in PIX_Field.', [this]); }
 	}
 
 	toString() :string {
@@ -81,7 +81,7 @@ class NumField extends Field<number> {
 		Field.prototype.validate.call(this);
 		if ((this.Min_Value != -999999 && this.Value < this.Min_Value) || 
 			(this.Max_Value != -999999 && this.Value > this.Max_Value))
-		{ throw new Error('PIX_Error: Invalid Data in PIX_IntField.'); }
+		{ throw new Utils.PIXError('Invalid Data in PIX_IntField.', this); }
 	}
 
 	setValue(value : number) : void {
