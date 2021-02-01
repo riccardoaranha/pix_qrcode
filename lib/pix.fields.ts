@@ -81,7 +81,7 @@ class NumField extends Field<number> {
 		Field.prototype.validate.call(this);
 		if ((this.Min_Value != -999999 && this.Value < this.Min_Value) || 
 			(this.Max_Value != -999999 && this.Value > this.Max_Value))
-		{ throw new Utils.PIXError('Invalid Data in PIX_IntField.', this); }
+		{ throw new Utils.PIXError('Invalid Data in PIX_IntField.', [this]); }
 	}
 
 	setValue(value : number) : void {
