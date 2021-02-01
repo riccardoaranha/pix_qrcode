@@ -13,8 +13,11 @@
     "url": "git+https://github.com/riccardoaranha/pix_qrcode.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": { 
+    "name": "Riccardo Aranha",
+    "url": "https://www.linkedin.com/in/riccardoaranha/"
+  },
+  "license": "GNU GENERAL PUBLIC LICENSE",
   "bugs": {
     "url": "https://github.com/riccardoaranha/pix_qrcode/issues"
   },
