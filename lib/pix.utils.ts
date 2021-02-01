@@ -1,7 +1,7 @@
 class PIXError extends Error { 
 	contents : string;
 	constructor(message: string, params : any[]) {
-		super('PIX Error:' + message);
+		super('PIX Error: ' + message);
 		this.name = 'PIXError';
 		var content = '';
 		params.forEach(function(obj : any) {
