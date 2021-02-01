@@ -39,42 +39,46 @@ function test(contenttype) {
 	}
 	
 	xhr.open("POST", url);
-
 	xhr.setRequestHeader("Content-Type", contenttype);
-	//xhr.setRequestHeader("Content-Type", "text/plain");
 
+	xhr.onerror = function () {
+		setError(JSON.stringify(xhr));
+	}
 	xhr.onreadystatechange = function () {
-		if (xhr.readyState === 4) {
-			if (xhr.status == 200)
-			{ setOK(xhr.response); }
-			else 
-			{ setError(xhr.response); }
+		try {
+			if (xhr.readyState === 4) {
+				if (xhr.status == 200)
+				{ setOK(xhr.response); }
+				else 
+				{ setError(JSON.stringify(xhr)); }
+			}
+		}
+		catch (e) {
+			setError(e.stack);
 		}
 	};
 
 	var data = document.getElementById('content').value;
 
 	try {
-		alert(url);
-		console.log(xhr);
 		xhr.send(data);
 	}
 	catch (e) {
-		setError('oi');
+		setError(e.stack);
 	}
 }
 </script>
 </head>
 <body>
-	<input type="text" id="content" value='{"key":"fulano2019@example.com","merchant_name":"FULANO DE TAL","merchant_city":"BRASILIA","transaction_amount":1234.17}'><br><br>
+	<input type="text" id="content" value='{"key":"fulano2019@example.com","merchant_name":"FULANO DE TAL","merchant_city":"BRASILIA","transaction_amount":1234.17}'><br /><br />
 	<select name="env" id="env">
 		  <option value="dev">Dev (<script>document.write(url_dev)</script>)</option>
 		  <option value="prod">Prod (<script>document.write(url_prod)</script>)</option>
-	</select><br><br>
+	</select><br /><br />
 	<button onclick='test("application/json")'>JSON</button>
 	<button onclick='test("text/plain")'>Text</button>
 	<p>
-	<img src = '' id = "qrcode"/> 
+	<img src = "" id = "qrcode"/> 
 	</p>
 	<p id="response"></p>
 </body>

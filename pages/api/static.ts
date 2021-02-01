@@ -56,6 +56,7 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 			PIX.QRCode.toDataURL(msg.toString(), function (data : string) : void {
 				res.status(200);
 				//res.setHeader('Content-Type', 'image/png');
+				res.setHeader('Content-Type', 'text/plain');
 				res.setHeader('Cache-Control', 's-maxage=10, stale-while=revalidate');
 				res.write(data);
 				res.end();
@@ -78,3 +79,4 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.end();
 	}
 }
+
