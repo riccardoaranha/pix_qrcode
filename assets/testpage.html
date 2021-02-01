@@ -1,40 +1,81 @@
 <html>
 <head>
 <script>
-function test(contenttype) {
-	const url = "http://localhost:3000/api/static";
+const url_dev = "http://localhost:3000/api/static";
+const url_prod = "https://pix-qrcode.vercel.app/api/static";
 
+Date.prototype.today = function () { 
+	return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
+}
+
+// For the time now
+Date.prototype.timeNow = function () {
+	return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+}
+
+function setOK(data) {
+	var newDate = new Date();
+	document.getElementById("response").innerHTML = newDate.today() + " @ " + newDate.timeNow() + " - OK";
+	document.getElementById("qrcode").src = data;
+}
+
+function setError(message) {
+	var newDate = new Date();
+	document.getElementById("qrcode").src = "";
+	document.getElementById("response").innerHTML = newDate.today() + " @ " + newDate.timeNow() + " - Error<br/><br/>"+ message;
+}
+
+function test(contenttype) {
 	var xhr = new XMLHttpRequest();
+	var url = '';
+	var env = document.getElementById("env").value;
+	if (env == "dev")
+	{ url = url_dev; }
+	else if (env == "prod")
+	{ url = url_prod; }
+	else { 
+		setError("Invalid select");
+		exit();
+	}
+	
 	xhr.open("POST", url);
 
 	xhr.setRequestHeader("Content-Type", contenttype);
 	//xhr.setRequestHeader("Content-Type", "text/plain");
 
 	xhr.onreadystatechange = function () {
-	   if (xhr.readyState === 4) {
-		  if (xhr.status == 200) {
-			document.getElementById("qrcode").src = xhr.response;
-			document.getElementById("response").innerHTML = "OK";
-		  }
-		  else {
-			document.getElementById("qrcode").src = "";
-			document.getElementById("response").innerHTML = xhr.response;
-		  }
-	   }};
+		if (xhr.readyState === 4) {
+			if (xhr.status == 200)
+			{ setOK(xhr.response); }
+			else 
+			{ setError(xhr.response); }
+		}
+	};
 
 	var data = document.getElementById('content').value;
 
-	xhr.send(data);
+	try {
+		alert(url);
+		console.log(xhr);
+		xhr.send(data);
+	}
+	catch (e) {
+		setError('oi');
+	}
 }
 </script>
 </head>
 <body>
 	<input type="text" id="content" value='{"key":"fulano2019@example.com","merchant_name":"FULANO DE TAL","merchant_city":"BRASILIA","transaction_amount":1234.17}'><br><br>
+	<select name="env" id="env">
+		  <option value="dev">Dev (<script>document.write(url_dev)</script>)</option>
+		  <option value="prod">Prod (<script>document.write(url_prod)</script>)</option>
+	</select><br><br>
 	<button onclick='test("application/json")'>JSON</button>
 	<button onclick='test("text/plain")'>Text</button>
 	<p>
-	<img src = "null" id = "qrcode"/> 
+	<img src = '' id = "qrcode"/> 
 	</p>
-	<p id = "response"></p>
+	<p id="response"></p>
 </body>
 </html>
