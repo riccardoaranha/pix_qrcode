@@ -68,9 +68,11 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.status(400);
 		res.write('Invalid request.\r\n');
 		res.write('\r\n');
-		res.write('Input\r\n');
-		res.write(JSON.stringify(req));
+		res.write('Input:\r\n');
 		res.write(req.body);
+		res.write('\r\n');
+		res.write('Treated Input:\r\n');
+		res.write(JSON.stringify(req));
 		res.write('\r\n');
 		res.write('\r\n');
 		res.write(error.stack);
