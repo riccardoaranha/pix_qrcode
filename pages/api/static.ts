@@ -70,13 +70,12 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.write('Invalid request.\r\n');
 		res.write('\r\n');
 		res.write('Input:\r\n' + req.body + '\r\n');
-		res.write('Treated Input:\r\n');
-		//res.write(util.inspect(req));
-		res.write('\r\n');
+		res.write('Treated Input:\r\n' + util.inspect(req) + '\r\n');
 		res.write('\r\n');
 		res.write(error.stack);
-		//if (error instanceof PIX.Utils.PIXError)
-		//{ res.write(error.contents); }
+		res.write('\r\n');
+		if (error instanceof PIX.Utils.PIXError)
+		{ res.write(error.contents); }
 		res.end();
 	}
 }
