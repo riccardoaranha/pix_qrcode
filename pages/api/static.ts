@@ -60,7 +60,7 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 				//res.setHeader('Content-Type', 'image/png');
 				res.setHeader('Content-Type', 'text/plain');
 				res.setHeader('Cache-Control', 's-maxage=10, stale-while=revalidate');
-				res.write(data);
+				res.write(/* data */'olá');
 				res.end();
 				resolve();
 			});
@@ -69,16 +69,17 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 				res.status(200);
 				res.setHeader('Content-Type', 'text/plain');
 				res.write('nao sei o que aconteceu');
-				res.write(error.stack);
-				res.write(util.inspect(req));
-				//res.write(data);
+				/*res.write(error.stack);
+				res.write(util.inspect(req));*/
+				res.end();
+				resolve();
 			}
 		});
 	}
 	catch (error) {
 		res.status(400);
 		res.write('Invalid request.\r\n');
-		res.write('\r\n');
+		/*res.write('\r\n');
 		res.write('Input:\r\n');
 		res.write(req.body);
 		res.write('\r\n');
@@ -88,8 +89,9 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.write('\r\n');
 		res.write(error.stack);
 		if (error instanceof PIX.Utils.PIXError)
-		{ res.write(error.contents); }
+		{ res.write(error.contents); }*/
 		res.end();
+		resolve();
 	}
 }
 
