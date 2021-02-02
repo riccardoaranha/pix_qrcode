@@ -91,7 +91,7 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		if (error instanceof PIX.Utils.PIXError)
 		{ res.write(error.contents); }*/
 		res.end();
-		resolve();
+		//resolve();
 	}
 }
 
