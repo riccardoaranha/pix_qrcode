@@ -1,3 +1,4 @@
+import util from 'util';
 class PIXError extends Error { 
 	contents : string;
 	constructor(message: string, params : any[]) {
@@ -5,7 +6,7 @@ class PIXError extends Error {
 		this.name = 'PIXError';
 		var content = '';
 		params.forEach(function(obj : any) {
-			content = content + JSON.stringify(obj) + '\r\n';
+			content = content + util.inspect(obj) + '\r\n';
 		});
 		this.contents = content;
 	}
