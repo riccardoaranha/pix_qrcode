@@ -43,13 +43,18 @@ function GenerateStatic(params : IStaticParams) : PIX.Messages.Static {
 
 export default (req : NextApiRequest, res : NextApiResponse) => {
 	try {
-		let params : IStaticParams;
-		if (typeof req.body === 'string')
-		{ params = JSON.parse(req.body); }
-		else 
-		{ params = req.body; }
+		let { body } = req;
 		
-		let msg : PIX.Messages.Static = GenerateStatic(params);
+		//console.log(body);
+		//let x = {body.key};
+		//res.send(`Hello ${body.key}, you just parsed the request body!`);
+		//return;
+		//let params : IStaticParams = ${body};
+		if (typeof body === 'string')
+		{ body = JSON.parse(body); }
+		
+		
+		let msg : PIX.Messages.Static = GenerateStatic(body);
 		msg.validate();
 		
 		return new Promise<void>((resolve, reject) => {
@@ -69,8 +74,8 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.status(400);
 		res.write('Invalid request.\r\n');
 		res.write('\r\n');
-		res.write('Input Body:\r\n' + util.inspect(req.body) + '\r\n');
-		res.write('\r\n');
+		//res.write('Input Body:\r\n' + util.inspect(body) + '\r\n');
+		//res.write('\r\n');
 		res.write(error.stack);
 		res.write('\r\n');
 		if (error instanceof PIX.Utils.PIXError)
