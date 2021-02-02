@@ -53,45 +53,33 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		msg.validate();
 		
 		return new Promise<void>((resolve, reject) => {
-			try {
 			//PIX.QRCode.toPNG(msg.getStringValue(), function (data : Buffer) : void {
 			PIX.QRCode.toDataURL(msg.getStringValue(), function (data : string) : void {
 				res.status(200);
 				//res.setHeader('Content-Type', 'image/png');
 				res.setHeader('Content-Type', 'text/plain');
 				res.setHeader('Cache-Control', 's-maxage=10, stale-while=revalidate');
-				res.write(/* data */'olá');
+				res.write(data);
 				res.end();
 				resolve();
 			});
-			}
-			catch(error) {
-				res.status(200);
-				res.setHeader('Content-Type', 'text/plain');
-				res.write('nao sei o que aconteceu');
-				/*res.write(error.stack);
-				res.write(util.inspect(req));*/
-				res.end();
-				resolve();
-			}
 		});
 	}
 	catch (error) {
 		res.status(400);
 		res.write('Invalid request.\r\n');
-		/*res.write('\r\n');
+		res.write('\r\n');
 		res.write('Input:\r\n');
-		res.write(req.body);
+		//res.write(req.body);
 		res.write('\r\n');
 		res.write('Treated Input:\r\n');
-		res.write(util.inspect(req));
+		//res.write(util.inspect(req));
 		res.write('\r\n');
 		res.write('\r\n');
 		res.write(error.stack);
 		if (error instanceof PIX.Utils.PIXError)
-		{ res.write(error.contents); }*/
+		{ res.write(error.contents); }
 		res.end();
-		//resolve();
 	}
 }
 
