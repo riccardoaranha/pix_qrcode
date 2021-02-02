@@ -35,7 +35,7 @@ class Message {
 		});
 	}
 
-	toString() : string {
+	getStringValue() : string {
 		if (Config.ValidationType == Config.ValidationTypes.Full)
 		{ this.validate(); }
 		let msg : string = '';
@@ -43,7 +43,7 @@ class Message {
 		{ 
 			if (item.Field instanceof Fields.CRC16)
 			{ item.Field.setValue(msg); }
-			msg = msg + item.Field.toString(); 
+			msg = msg + item.Field.getStringValue(); 
 		}
 		if (Config.ValidationType == Config.ValidationTypes.Full)
 		{ this.validate(); }

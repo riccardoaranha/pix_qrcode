@@ -13,7 +13,7 @@ export interface IField<T> {
 
 	setValue(value : T) : void;
 	validate() : void;
-	toString() : string;
+	getStringValue() : string;
 }
 
 abstract class Field<T> implements IField<T> {
@@ -43,7 +43,7 @@ abstract class Field<T> implements IField<T> {
 		{ throw new Utils.PIXError('Invalid Data in PIX_Field.', [this]); }
 	}
 
-	toString() :string {
+	getStringValue() : string {
 		if (Config.ValidationType == Config.ValidationTypes.Full)
 		{ this.validate(); }
 		return this.ID + Utils.zeroPad(this.TextValue.length, 2) + this.TextValue;
@@ -87,7 +87,7 @@ class NumField extends Field<number> {
 	setValue(value : number) : void {
 		this.Value = value;
 		if (this.Decimals == 0)
-		{ this.TextValue = value.toString(); }
+		{ this.TextValue = value.getStringValue(); }
 		else 
 		{ this.TextValue = value.toFixed(this.Decimals); }
 

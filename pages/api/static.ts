@@ -52,8 +52,8 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		msg.validate();
 		
 		return new Promise<void>((resolve, reject) => {
-			//PIX.QRCode.toPNG(msg.toString(), function (data : Buffer) : void {
-			PIX.QRCode.toDataURL(msg.toString(), function (data : string) : void {
+			//PIX.QRCode.toPNG(msg.getStringValue(), function (data : Buffer) : void {
+			PIX.QRCode.toDataURL(msg.getStringValue(), function (data : string) : void {
 				res.status(200);
 				//res.setHeader('Content-Type', 'image/png');
 				res.setHeader('Content-Type', 'text/plain');

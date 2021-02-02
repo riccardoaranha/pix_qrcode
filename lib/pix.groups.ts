@@ -29,7 +29,7 @@ class Group<T extends Fields.IField<any>> implements Fields.IField<undefined> {
 		var content = '';
 		this.Children.forEach(function(item) {
 			item.validate();
-			content = content + item.toString();
+			content = content + item.getStringValue();
 		});
 		content = this.ID + content.length + content;
 	
@@ -41,12 +41,12 @@ class Group<T extends Fields.IField<any>> implements Fields.IField<undefined> {
 		}
 	}
 
-	toString () : string {
+	getStringValue () : string {
 		if (Config.ValidationType == Config.ValidationTypes.Full)
 		{ this.validate(); }
 		var content = '';
 		this.Children.forEach(function(item) {
-			content = content + item.toString();
+			content = content + item.getStringValue();
 		});
 		content = this.ID + content.length + content;
 
