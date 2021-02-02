@@ -1,4 +1,5 @@
 import util from 'util';
+
 class PIXError extends Error { 
 	contents : string;
 	constructor(message: string, params : any[]) {

@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import util from 'util';
 import * as PIX from '../../lib/pix';
 
 interface IStaticParams {
@@ -52,6 +53,7 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		msg.validate();
 		
 		return new Promise<void>((resolve, reject) => {
+			try {
 			//PIX.QRCode.toPNG(msg.getStringValue(), function (data : Buffer) : void {
 			PIX.QRCode.toDataURL(msg.getStringValue(), function (data : string) : void {
 				res.status(200);
@@ -62,6 +64,15 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 				res.end();
 				resolve();
 			});
+			}
+			catch(error) {
+				res.status(200);
+				res.setHeader('Content-Type', 'text/plain');
+				res.write('nao sei o que aconteceu');
+				res.write(error.stack);
+				res.write(util.inspect(req));
+				res.write(data);
+			}
 		});
 	}
 	catch (error) {
@@ -71,10 +82,10 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.write('Input:\r\n');
 		res.write(req.body);
 		res.write('\r\n');
-		//res.write('Treated Input:\r\n');
-		//res.write(JSON.stringify(req));
-		//res.write('\r\n');
-		//res.write('\r\n');
+		res.write('Treated Input:\r\n');
+		res.write(util.inspect(req));
+		res.write('\r\n');
+		res.write('\r\n');
 		res.write(error.stack);
 		if (error instanceof PIX.Utils.PIXError)
 		{ res.write(error.contents); }
