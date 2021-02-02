@@ -87,7 +87,7 @@ class NumField extends Field<number> {
 	setValue(value : number) : void {
 		this.Value = value;
 		if (this.Decimals == 0)
-		{ this.TextValue = value.getStringValue(); }
+		{ this.TextValue = value.toString(); }
 		else 
 		{ this.TextValue = value.toFixed(this.Decimals); }
 
