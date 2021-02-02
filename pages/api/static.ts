@@ -71,10 +71,10 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 		res.write('Input:\r\n');
 		res.write(req.body);
 		res.write('\r\n');
-		res.write('Treated Input:\r\n');
-		res.write(JSON.stringify(req));
-		res.write('\r\n');
-		res.write('\r\n');
+		//res.write('Treated Input:\r\n');
+		//res.write(JSON.stringify(req));
+		//res.write('\r\n');
+		//res.write('\r\n');
 		res.write(error.stack);
 		if (error instanceof PIX.Utils.PIXError)
 		{ res.write(error.contents); }
