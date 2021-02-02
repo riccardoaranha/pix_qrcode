@@ -71,7 +71,7 @@ export default (req : NextApiRequest, res : NextApiResponse) => {
 				res.write('nao sei o que aconteceu');
 				res.write(error.stack);
 				res.write(util.inspect(req));
-				res.write(data);
+				//res.write(data);
 			}
 		});
 	}
